@@ -13,14 +13,20 @@ import java.util.function.*;
 import java.util.stream.*;
 
 public class Platform {
+    
+    // Main collections of the platform, indexed by ID
     public final Map<String, Restaurant> restaurants = new HashMap<>();
     public final Map<String, Customer> customers = new HashMap<>();
     public final Map<String, Rider> riders = new HashMap<>();
     public final Map<String, Order> orders = new HashMap<>();
     public final Map<String, Promotion> promotions = new HashMap<>();
+
+    // Gold customers have priority, then older orders
     final PriorityQueue<Order> ready = new PriorityQueue<>(Comparator
             .comparing((Order o) -> o.customer.tier() != Tier.GOLD)
             .thenComparing(o -> o.readyAt));
+
+    // Keep track of order status changes    
     public final List<String> audit = new ArrayList<>();
 
     public void addRestaurant(Restaurant value) {
